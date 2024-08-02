@@ -16,7 +16,21 @@
 /**
  * Common constants for all features.
  */
-export default class CommonConstants {
+export class CommonConstants {
+  /**
+   * Component size.
+   */
+  static readonly SWIPER_DEFAULT_WIDTH: string = '66%';
+  static readonly FULL_PERCENT: string = '100%';
+  static readonly HALF_PERCENT: string = '50%';
+  static readonly IMAGE_CONTAINER_HEIGHT: string = '42%';
+  static readonly FULL_SIZE: string = '100%';
+  static readonly ICON_SIZE: string = '40%';
+  static readonly BAR_WEIGHT: string = '25%';
+  static readonly BAR_HEIGHT: string = '10%';
+  static readonly CONTENT_WIDTH_PERCENT: string = '87%';
+  static readonly SEARCHBAR_WIDTH: string = '91.1%'
+  static readonly IMAGE_HEIGHT_MIN: string = '78%';
   /**
    * The main ability tag.
    */
@@ -91,6 +105,8 @@ export default class CommonConstants {
    * Advertising page url.
    */
   static readonly ADVERTISING_PAGE_URL: string = 'pages/AdvertisingPage';
+
+  static readonly INTRODUCTION_PAGE_URL: string = 'pages/IntroductionPage';
 
   /**
    * Display countdown seconds.
@@ -181,4 +197,31 @@ export default class CommonConstants {
    * Common layout weight.
    */
   static readonly COMMON_LAYOUT_WEIGHT: number = 1;
+
+  static readonly CAN_CONTINUATION: string = 'true';
+
+
+  // Splash
+  static readonly DURATION: number = 1000;
+  static readonly MORNING_TIME: number = 6;
+  static readonly EVENING_TIME: number = 18;
+  static readonly NIGHT_TIME: number = 19;
+  static readonly SPLASH_DURATION: number = 3000;
+  static readonly COUNTDOWN: number = 5;
+
+
+  static readonly SPLASH_DES: string = '溪流背坡村';
+  static readonly SPLASH_WELCOME: string = '溪村欢迎您';
+  static readonly INTRODUCTION_TITLE: string = '区域导览';
+  static readonly TRAIN_TITLE: string = "小火车";
+
+  static readonly PERCENTAGE_78: string = '78%';
+  static readonly PERCENTAGE_15: string = '15%';
+  static readonly PERCENTAGE_25: string = '25%';
+}
+
+export enum TrainsLine {
+  LINE_ONE = 0,
+  LINE_TWO = 1,
+  LINE_THREE = 2,
 }
