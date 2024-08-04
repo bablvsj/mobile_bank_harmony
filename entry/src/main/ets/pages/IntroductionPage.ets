@@ -10,6 +10,7 @@ struct IntroductionPage {
       // Image($r('app.media.ic_launcher_background'))
       //   .width(CommonConstants.FULL_WIDTH)
       //   .height(CommonConstants.FULL_HEIGHT)
+
       Column() {
         // 启动页logo
         Image($r('app.media.logo'))

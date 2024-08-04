@@ -4,6 +4,9 @@
     "pages/IntroductionPage",
     "pages/LauncherPage",
     "pages/PrivacyPage",
-    "pages/Splash"
+    "pages/Splash",
+    "pages/TempStatePage",
+    "pages/TempProvideConsume",
+    "pages/TempTaskDetail"
   ]
 }
