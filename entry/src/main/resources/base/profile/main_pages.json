@@ -7,6 +7,8 @@
     "pages/Splash",
     "pages/TempStatePage",
     "pages/TempProvideConsume",
-    "pages/TempTaskDetail"
+    "pages/TempTaskDetail",
+    "pages/TempFishGame",
+    "pages/TempFullPage"
   ]
 }
