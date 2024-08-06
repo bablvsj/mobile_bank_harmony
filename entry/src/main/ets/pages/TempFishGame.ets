@@ -1,5 +1,5 @@
 import { CommonConstants as Const } from '../common/constants/CommonConstants';
-import { router, window } from '@kit.ArkUI';
+import { curves, router, window } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 
 @Entry
@@ -15,14 +15,24 @@ struct TempFishGame {
   // 是否开始游戏
   @State isBegin: boolean = false
   // 摇杆中心区域坐标
-  private centerX: number = 100
-  private centerY: number = 180
+  private centerX: number = 80
+  private centerY: number = 80
   // 大、小圆半径
   private maxRadius: number = 80
-  private radius: number = 20
+  private radius: number = 15
   // 摇杆小圆球初始位置
   @State positionX: number = this.centerX;
   @State positionY: number = this.centerY;
+
+  // 角度正弦和余弦
+  sin: number = 0
+  cos: number = 0
+
+  // 小鱼移动速度
+  speed: number = 0
+  // 任务id
+  taskId: number = -1
+
 
   build() {
     Row() {
@@ -118,12 +128,17 @@ struct TempFishGame {
           Circle({ width: this.maxRadius * 2, height: this.maxRadius * 2 })
             .fill("#20101010")
             .position({ x: this.centerX - this.maxRadius, y: this.centerY - this.maxRadius })
-            .onTouch(this.handleTouchEvent)
+
           Circle({ width: this.radius * 2, height: this.radius * 2 })
             .fill("#403A3a3a")
             .position({ x: this.positionX - this.radius, y: this.positionY - this.radius })
         }
-
+        .height(160)
+        .width(160)
+        .justifyContent(FlexAlign.Center)
+        // .backgroundColor("rgba(214, 166, 166, 0.50)")
+        .position({x:20,y:100})
+        .onTouch(this.handleTouchEvent.bind(this))
       }
       .height('100%').width('100%')
     }
@@ -134,35 +149,86 @@ struct TempFishGame {
   }
 
   handleTouchEvent(event: TouchEvent) {
-    // 获取手指位置坐标
-
-    let x = event.touches[0].x
-    let y = event.touches[0].y
-
-    //    计算手指与中心点的坐标差值
-    let vx = x - this.centerX;
-    let vy = y - this.centerY;
 
 
-    //   计算手指与中心点连线和x轴正半轴的夹角,单位弧度
-    let angle = Math.atan2(vy, vx);
+    switch (event.type){
+      case TouchType.Up:
+
+        this.speed = 0
+        clearInterval(this.taskId)
 
 
-    //    计算手指与中心点的距离，最大为外圆的半径。
+        animateTo({
+          curve:curves.springMotion()
+        },()=>{
+          // 5.计算摇杆小球的坐标
+          this.positionX = this.centerX;
+          this.positionY = this.centerY;
+        })
 
-    let distance = this.getDistance(vx, vy)
+
+        break;
+      case TouchType.Down:
+
+        this.taskId = setInterval(() => {
+          this.fishX += this.speed * this.cos
+          this.fishY += this.speed * this.sin
+        }, 40)
+        break
+
+      case TouchType.Move:
+
+        // 1.获取手指位置坐标
+        let x = event.touches[0].x
+        let y = event.touches[0].y
+
+        // 2.计算手指与中心点的坐标差值
+        let vx = x - this.centerX;
+        let vy = y - this.centerY;
+
+        // 3.计算手指与中心点连线和x轴正半轴的夹角,单位弧度
+        let angle = Math.atan2(vy, vx);
+
+        // 4.计算手指与中心点的距离，最大为外圆的半径。
+        let distance = this.getDistance(vx, vy)
+
+        this.sin = Math.sin(angle);
+        this.cos = Math.cos(angle);
+
+        animateTo({
+          curve:curves.responsiveSpringMotion()
+        },()=>{
+          // 5.计算摇杆小球的坐标
+          this.positionX = this.centerX + distance * this.cos;
+          this.positionY = this.centerY + distance * this.sin;
+
+          // 6.修改小鱼的角度
+          if(Math.abs(angle * 2) < Math.PI){
+            this.src = $r('app.media.fish')
+          }else{
+            this.src = $r('app.media.fish_rev')
+            angle = angle < 0 ? angle + Math.PI : angle - Math.PI
+          }
+          this.angle = angle * 180 / Math.PI
+          this.speed = 2
+        })
+
+        break;
+      case TouchType.Cancel:
+        break;
+
+    }
 
 
-    // 计算距离
 
-    this.positionX = this.centerX
+
 
 
   }
 
   getDistance(x: number, y: number) {
     let d = Math.sqrt(x * x + y * y)
-    return Math.min(d,this.maxRadius)
+    return Math.min(d,this.maxRadius-15)
   }
 }
 
